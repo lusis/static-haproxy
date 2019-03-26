@@ -1,7 +1,7 @@
 USE_STATIC_PCRE=1
 TARGET=linux2628
 HAPROXY_VERSION="${HAPROXY_MAJOR_VERSION}.${HAPROXY_MINOR_VERSION}"
-PCRE_TARBALL="pcre-${PCRE_VERSION}.tar.gz"
+PCRE_TARBALL="pcre-${PCRE_VERSION}.tar.bz2"
 OPENSSL_TARBALL="openssl-${OPENSSL_VERSION}.tar.gz"
 ZLIB_TARBALL="zlib-${ZLIB_VERSION}.tar.gz"
 HAPROXY_TARBALL="haproxy-${HAPROXY_VERSION}.tar.gz"
@@ -14,21 +14,21 @@ CWD=$(pwd)
 # create a new file to set timestamp, we are not using touch since we need the filesystem to provide time (to handle remote FS)
 rm .timestamp || true
 cat "" > .timestamp
-if [[ ! -d "${PCRE_TARBALL%.tar.gz}" ]]; then
-  wget "http://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${PCRE_TARBALL}"
-  tar --no-same-owner --mtime=.timestamp -xvzf "${PCRE_TARBALL}" && rm -f "${PCRE_TARBALL}"
-  find "${PCRE_TARBALL%.tar.gz}" -print0 |xargs -0 touch -r .timestamp
+if [[ ! -d "${PCRE_TARBALL%.tar.bz2}" ]]; then
+  wget "https://ftp.pcre.org/pub/pcre/${PCRE_TARBALL}"
+  tar --no-same-owner --mtime=.timestamp -jxvf "${PCRE_TARBALL}" && rm -f "${PCRE_TARBALL}"
+  find "${PCRE_TARBALL%.tar.bz2}" -print0 |xargs -0 touch -r .timestamp
 fi
  
 if [[ ! -d "${OPENSSL_TARBALL%.tar.gz}" ]]; then
   wget "http://www.openssl.org/source/${OPENSSL_TARBALL}"
-  tar --no-same-owner --mtime=.timestamp -xvzf "${OPENSSL_TARBALL}" && rm -f "${OPENSSL_TARBALL}"
+  tar --no-same-owner --mtime=.timestamp -zxvf "${OPENSSL_TARBALL}" && rm -f "${OPENSSL_TARBALL}"
   find "${OPENSSL_TARBALL%.tar.gz}" -print0 |xargs -0 touch -r .timestamp
 fi
  
 if [[ ! -d "${ZLIB_TARBALL%.tar.gz}" ]]; then
   wget "http://zlib.net/${ZLIB_TARBALL}"
-  tar --no-same-owner --mtime=.timestamp -xvzf "${ZLIB_TARBALL}" && rm -rf "${ZLIB_TARBALL}"
+  tar --no-same-owner --mtime=.timestamp -zxvf "${ZLIB_TARBALL}" && rm -rf "${ZLIB_TARBALL}"
   find "${ZLIB_TARBALL%.tar.gz}" -print0 |xargs -0 touch -r .timestamp
 fi
 if [[ ! -d "${HAPROXY_TARBALL%.tar.gz}" ]]; then
@@ -80,6 +80,6 @@ Linked against
    Zlib ${ZLIB_VERSION}
    OpenSSL ${OPENSSL_VERSION}
    Pcre ${PCRE_VERSION}
-See http://github.com/askholme/static-haproxy for more info
+See http://github.com/lusis/static-haproxy for more info
 EOF
 tar czf $TRAVIS_BUILD_DIR/$PCK_NAME.tar.gz .
