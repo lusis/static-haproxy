@@ -56,13 +56,6 @@ mkdir -p $ZLIBDIR
 cd $CWD/zlib-${ZLIB_VERSION}
 ./configure --static --prefix=$ZLIBDIR
 make && make install
-# patch makefile to allow ZLIBPATHS
-#GLIBCDIR=$CWD/glibcbin
-#mkdir -p $GLIBCDIR
-#mkdir -p $CWD/glibcbuild
-#cd $CWD/glibcbuild
-#$CWD/glibc-${GLIBC_VERSION}/configure --prefix=$GLIBCDIR --enable-static-nss
-#make && make install
 mkdir -p $CWD/bin
 cd $CWD/haproxy-${HAPROXY_VERSION}
 patch -p0 Makefile < $CWD/haproxy_makefile.patch
