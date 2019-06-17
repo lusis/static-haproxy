@@ -60,7 +60,7 @@ mkdir -p $CWD/bin
 cd $CWD/haproxy-${HAPROXY_VERSION}
 patch -p0 Makefile < $CWD/haproxy_makefile.patch
 sed -ibak "s#PREFIX = /usr/local#PREFIX = $CWD/bin#g" Makefile
-make TARGET=linux2628 USE_STATIC_PCRE=1 USE_ZLIB=1 USE_OPENSSL=1 ZLIB_LIB=$ZLIBDIR/lib ZLIB_INC=$ZLIBDIR/include SSL_INC=$SSLDIR/include SSL_LIB=$SSLDIR/lib ADDLIB=-ldl -lzlib PCREDIR=$PCREDIR 
+make TARGET=linux-glibc EXTRA_OBJS="contrib/prometheus-exporter/service-prometheus.o" USE_STATIC_PCRE=1 USE_ZLIB=1 USE_OPENSSL=1 ZLIB_LIB=$ZLIBDIR/lib ZLIB_INC=$ZLIBDIR/include SSL_INC=$SSLDIR/include SSL_LIB=$SSLDIR/lib ADDLIB=-ldl -lzlib PCREDIR=$PCREDIR 
 make install
 cd $CWD/bin
 cp $CWD/zlib-${ZLIB_VERSION}/README ZLIB-LICENSE
